@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kawarini_ketsudan/page/home_page.dart';
+import 'package:kawarini_ketsudan/view/page/home_page.dart';
+import 'package:kawarini_ketsudan/view/theme/my_theme.dart';
 
 void main() => runApp(const MyApp());
 
@@ -8,9 +9,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      theme: MyTheme.themeData,
+      home: const HomePage(),
     );
   }
 }
