@@ -40,6 +40,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
+        bottomSheet: _bottomSheet(),
       ),
     );
   }
@@ -135,6 +136,50 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _bottomSheet() {
+    return Container(
+      height: 50,
+      decoration: const BoxDecoration(
+        color: MyColor.amber,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+      ),
+      child: SafeArea(
+        child: Row(
+          children: [
+            TextButton(
+              onPressed: () => debugPrint('やめる'),
+              child: const Text('やめる'),
+            ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: MyColor.darkAmber,
+                  borderRadius: BorderRadius.circular(17),
+                ),
+                child: TextField(
+                  cursorColor: MyColor.white,
+                  style: MyTextStyle.white,
+                  decoration: InputDecoration(
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: _closeButton(onPressed: () => debugPrint('close')),
+                    ),
+                    suffixIconConstraints: const BoxConstraints(),
+                  ),
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => debugPrint('決断'),
+              child: const Text('決断'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
