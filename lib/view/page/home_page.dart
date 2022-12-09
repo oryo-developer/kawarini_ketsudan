@@ -23,11 +23,13 @@ class HomePage extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 16),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
+                  width: double.infinity,
                   decoration: BoxDecoration(
                     border: Border.all(color: MyColor.amber, width: 2),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: _decisionHistory(),
+                  // child: _decisionHistory(),
+                  child: _options(),
                 ),
               ),
               SizedBox(
@@ -136,6 +138,76 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _options() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          runAlignment: WrapAlignment.center,
+          spacing: 16,
+          runSpacing: 16,
+          children: [
+            'aiueo',
+            'a',
+            'aue',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiueo',
+            'aiue',
+          ].map((e) {
+            return Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: MyColor.amber,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(e, style: MyTextStyle.white),
+                  _closeButton(onPressed: () {}),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      ),
     );
   }
 
