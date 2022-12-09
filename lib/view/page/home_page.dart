@@ -86,6 +86,8 @@ class HomePage extends StatelessWidget {
                       ),
                       child: Marquee(
                         pauseDuration: const Duration(seconds: 1),
+                        forwardAnimation: Curves.easeInOut,
+                        backwardAnimation: Curves.easeInOut,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: Row(
