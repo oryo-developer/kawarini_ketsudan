@@ -7,37 +7,35 @@ class MyTextStyle {
     double? fontSize,
     double? letterSpacing,
     TextDecoration? decoration,
+    TextOverflow? overflow,
   }) {
     return TextStyle(
-      color: color,
+      color: color ?? MyColor.white,
       fontSize: fontSize,
       fontWeight: FontWeight.bold,
       letterSpacing: letterSpacing,
       decoration: decoration,
-      overflow: TextOverflow.ellipsis,
+      overflow: overflow ?? TextOverflow.ellipsis,
     );
   }
 
-  static TextStyle get black16 => _textStyle(fontSize: 16);
-
-  static TextStyle get white10 {
-    return _textStyle(color: MyColor.white, fontSize: 10);
+  static TextStyle get black16 {
+    return _textStyle(color: MyColor.black, fontSize: 16);
   }
 
-  static TextStyle get white => _textStyle(color: MyColor.white);
+  static TextStyle get white10 => _textStyle(fontSize: 10);
+
+  static TextStyle get white => _textStyle();
+
+  static TextStyle get whiteOverflow => _textStyle(overflow: TextOverflow.clip);
 
   static TextStyle get whiteUnderline {
-    return _textStyle(
-      color: MyColor.white,
-      decoration: TextDecoration.underline,
-    );
+    return _textStyle(decoration: TextDecoration.underline);
   }
 
-  static TextStyle get white20 {
-    return _textStyle(color: MyColor.white, fontSize: 20);
-  }
+  static TextStyle get white20 => _textStyle(fontSize: 20);
 
   static TextStyle get white32LetterSpacing {
-    return _textStyle(color: MyColor.white, fontSize: 32, letterSpacing: 32);
+    return _textStyle(fontSize: 32, letterSpacing: 32);
   }
 }
