@@ -5,6 +5,8 @@ import 'package:kawarini_ketsudan/view/theme/my_text_style.dart';
 class MyTheme {
   static ThemeData get themeData {
     return ThemeData(
+      splashColor: MyColor.transparent,
+      highlightColor: MyColor.transparent,
       iconTheme: const IconThemeData(color: MyColor.white),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -13,6 +15,7 @@ class MyTheme {
           shadowColor: MyColor.transparent,
           padding: const EdgeInsets.symmetric(vertical: 8),
           textStyle: MyTextStyle.white32LetterSpacing,
+          splashFactory: NoSplash.splashFactory,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -22,6 +25,7 @@ class MyTheme {
         style: TextButton.styleFrom(
           foregroundColor: MyColor.white,
           textStyle: MyTextStyle.whiteUnderline,
+          splashFactory: NoSplash.splashFactory,
         ),
       ),
       inputDecorationTheme: const InputDecorationTheme(
