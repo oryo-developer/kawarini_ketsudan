@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kawarini_ketsudan/controller/home_page_controller.dart';
+import 'package:kawarini_ketsudan/extension/text_editing_controller_extension.dart';
 import 'package:kawarini_ketsudan/view/theme/my_color.dart';
 import 'package:kawarini_ketsudan/view/theme/my_text_style.dart';
 import 'package:marquee_widget/marquee_widget.dart';
@@ -9,42 +13,52 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: const SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.light,
-      ),
-      child: Scaffold(
-        body: SafeArea(
-          minimum: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: MyColor.amber, width: 2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  // child: _decisionHistory(),
-                  child: _options(),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => debugPrint('決断'),
-                  child: const Text('決断'),
-                ),
-              ),
-            ],
-          ),
+    return HookConsumer(builder: (context, ref, child) {
+      final state = ref.watch(homePageProvider);
+      final controller = ref.read(homePageProvider.notifier);
+
+      return AnnotatedRegion(
+        value: const SystemUiOverlayStyle(
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light,
         ),
-        bottomSheet: _bottomSheet(),
-      ),
-    );
+        child: Scaffold(
+          body: SafeArea(
+            minimum: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(
+                      bottom: state.bottomSheetVisible ? 66 : 16,
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: MyColor.amber, width: 2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child:
+                        state.optionsVisible ? _options() : _decisionHistory(),
+                  ),
+                ),
+                Visibility(
+                  visible: !state.optionsVisible,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => controller.trueTrueFocus(options: []),
+                      child: const Text('決断'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          bottomSheet: _bottomSheet(),
+        ),
+      );
+    });
   }
 
   Widget _decisionHistory() {
@@ -142,125 +156,135 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _options() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          runAlignment: WrapAlignment.center,
-          spacing: 16,
-          runSpacing: 16,
-          children: [
-            'aiueo',
-            'a',
-            'aue',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiueo',
-            'aiue',
-          ].map((e) {
-            return Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: MyColor.amber,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(e, style: MyTextStyle.white),
-                  _closeButton(onPressed: () {}),
-                ],
-              ),
-            );
-          }).toList(),
+    return HookConsumer(builder: (context, ref, child) {
+      final state = ref.watch(homePageProvider);
+      final controller = ref.read(homePageProvider.notifier);
+
+      return Center(
+        child: SingleChildScrollView(
+          controller: state.scrollController,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 16,
+              runSpacing: 16,
+              children: state.options.map((option) {
+                return Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: MyColor.amber,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          option.text,
+                          style: MyTextStyle.whiteOverflow,
+                        ),
+                      ),
+                      _closeButton(
+                        onPressed: () => controller.remove(option: option),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _bottomSheet() {
-    return Container(
-      height: 50,
-      decoration: const BoxDecoration(
-        color: MyColor.amber,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-      ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            TextButton(
-              onPressed: () => debugPrint('やめる'),
-              child: const Text('やめる'),
-            ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: MyColor.darkAmber,
-                  borderRadius: BorderRadius.circular(17),
+    return HookConsumer(builder: (context, ref, child) {
+      final state = ref.watch(homePageProvider);
+      final controller = ref.read(homePageProvider.notifier);
+
+      final textEditingController = useTextEditingController();
+      final clearButtonVisible = useState(false);
+
+      useEffect(() {
+        return textEditingController.addAndRemoveListener(() {
+          clearButtonVisible.value = textEditingController.text.isNotEmpty;
+        });
+      }, [textEditingController]);
+
+      return Visibility(
+        visible: state.bottomSheetVisible,
+        child: Container(
+          height: 50,
+          decoration: const BoxDecoration(
+            color: MyColor.amber,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+          ),
+          child: SafeArea(
+            child: Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    textEditingController.clear();
+                    controller.falseFalseUnfocus();
+                  },
+                  child: const Text('やめる'),
                 ),
-                child: TextField(
-                  cursorColor: MyColor.white,
-                  style: MyTextStyle.white,
-                  decoration: InputDecoration(
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: _closeButton(onPressed: () => debugPrint('close')),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color: MyColor.darkAmber,
+                      borderRadius: BorderRadius.circular(17),
                     ),
-                    suffixIconConstraints: const BoxConstraints(),
+                    child: TextField(
+                      controller: textEditingController,
+                      focusNode: state.focusNode,
+                      cursorColor: MyColor.white,
+                      style: MyTextStyle.white,
+                      decoration: InputDecoration(
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: _closeButton(
+                            visible: clearButtonVisible.value,
+                            onPressed: () => textEditingController.clear(),
+                          ),
+                        ),
+                        suffixIconConstraints: const BoxConstraints(),
+                      ),
+                      onSubmitted: (text) {
+                        textEditingController.clear();
+                        controller.add(text: text);
+                      },
+                    ),
                   ),
                 ),
-              ),
+                TextButton(
+                  onPressed: 1 < state.options.length
+                      ? () {
+                          debugPrint('決断');
+                        }
+                      : null,
+                  child: const Text('決断'),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () => debugPrint('決断'),
-              child: const Text('決断'),
-            ),
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  Widget _closeButton({required VoidCallback onPressed}) {
-    return IconButton(
-      onPressed: onPressed,
-      icon: const Icon(Icons.close),
-      padding: EdgeInsets.zero,
-      constraints: const BoxConstraints(),
+  Widget _closeButton({bool? visible, required VoidCallback onPressed}) {
+    return Visibility(
+      visible: visible ?? true,
+      child: IconButton(
+        onPressed: onPressed,
+        icon: const Icon(Icons.close),
+        padding: EdgeInsets.zero,
+        constraints: const BoxConstraints(),
+      ),
     );
   }
 }
