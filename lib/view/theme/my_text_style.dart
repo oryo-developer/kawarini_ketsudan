@@ -19,13 +19,13 @@ class MyTextStyle {
     );
   }
 
-  static TextStyle get black => _textStyle(color: MyColor.black);
-
-  static TextStyle get white10 => _textStyle(fontSize: 10);
+  static TextStyle get black20 {
+    return _textStyle(color: MyColor.black, fontSize: 20);
+  }
 
   static TextStyle get white => _textStyle();
 
-  static TextStyle get whiteOverflow => _textStyle(overflow: TextOverflow.clip);
+  static TextStyle get whiteClip => _textStyle(overflow: TextOverflow.clip);
 
   static TextStyle get whiteUnderline {
     return _textStyle(decoration: TextDecoration.underline);
@@ -33,7 +33,7 @@ class MyTextStyle {
 
   static TextStyle get white20 => _textStyle(fontSize: 20);
 
-  static TextStyle get white32LetterSpacing {
-    return _textStyle(fontSize: 32, letterSpacing: 32);
+  static TextStyle get white45 {
+    return _textStyle(fontSize: 45, letterSpacing: 45);
   }
 }
