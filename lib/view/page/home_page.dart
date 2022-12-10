@@ -6,6 +6,7 @@ import 'package:kawarini_ketsudan/controller/decisions_controller.dart';
 import 'package:kawarini_ketsudan/controller/home_page_controller.dart';
 import 'package:kawarini_ketsudan/controller/options_controller.dart';
 import 'package:kawarini_ketsudan/extension/text_editing_controller_extension.dart';
+import 'package:kawarini_ketsudan/model/decision_model.dart';
 import 'package:kawarini_ketsudan/view/theme/my_color.dart';
 import 'package:kawarini_ketsudan/view/theme/my_text_style.dart';
 import 'package:marquee_widget/marquee_widget.dart';
@@ -62,7 +63,6 @@ class HomePage extends HookConsumerWidget {
       final controller = ref.read(homePageProvider.notifier);
 
       final decisions = ref.watch(decisionsProvider);
-      final decisionsController = ref.read(decisionsProvider.notifier);
 
       return Column(children: [
         Padding(
@@ -77,59 +77,71 @@ class HomePage extends HookConsumerWidget {
             itemCount: decisions.length,
             itemBuilder: (context, index) => GestureDetector(
               onTap: () => controller.show(options: decisions[index].options),
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: MyColor.amber,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(children: [
-                  Row(children: [
-                    Expanded(
-                      child: Text(
-                        decisions[index].option,
-                        style: MyTextStyle.white20,
-                      ),
-                    ),
-                    _closeButton(
-                      onPressed: () => decisionsController.delete(
-                        decision: decisions[index],
-                      ),
-                    ),
-                  ]),
-                  const SizedBox(height: 4),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: MyColor.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Marquee(
-                      pauseDuration: const Duration(seconds: 2),
-                      animationDuration: const Duration(seconds: 10),
-                      backDuration: const Duration(seconds: 10),
-                      forwardAnimation: Curves.easeInOut,
-                      backwardAnimation: Curves.easeInOut,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Row(
-                          children: decisions[index].options.map(
-                            (option) {
-                              return _option(option: option, paddingRight: 8);
-                            },
-                          ).toList(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
+              child: _decision(decisions[index]),
             ),
           ),
         ),
       ]);
+    });
+  }
+
+  Widget _decision(Decision decision) {
+    return HookConsumer(builder: (context, ref, child) {
+      final controller = ref.read(decisionsProvider.notifier);
+
+      return Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: MyColor.amber,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(children: [
+          Row(children: [
+            Expanded(child: Text(decision.option, style: MyTextStyle.white20)),
+            _closeButton(
+              onPressed: () => controller.delete(decision: decision),
+            ),
+          ]),
+          const SizedBox(height: 4),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: MyColor.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Marquee(
+              pauseDuration: const Duration(seconds: 2),
+              animationDuration: const Duration(seconds: 5),
+              backDuration: const Duration(seconds: 5),
+              forwardAnimation: Curves.easeInOut,
+              backwardAnimation: Curves.easeInOut,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Row(
+                  children: decision.options.map(
+                    (option) {
+                      return OrientationBuilder(
+                        builder: (context, orientation) {
+                          final size = MediaQuery.of(context).size;
+                          return _option(
+                            width: size.width < size.height
+                                ? (size.width - 139) / 2
+                                : (size.width - 187) / 2,
+                            option: option,
+                            paddingRight: 8,
+                          );
+                        },
+                      );
+                    },
+                  ).toList(),
+                ),
+              ),
+            ),
+          ),
+        ]),
+      );
     });
   }
 
@@ -138,7 +150,7 @@ class HomePage extends HookConsumerWidget {
       final state = ref.watch(homePageProvider);
 
       final options = ref.watch(optionsProvider);
-      final optionsController = ref.read(optionsProvider.notifier);
+      final controller = ref.read(optionsProvider.notifier);
 
       return Center(
         child: SingleChildScrollView(
@@ -152,7 +164,7 @@ class HomePage extends HookConsumerWidget {
               children: options.asMap().entries.map((entry) {
                 return _option(
                   option: entry.value,
-                  onPressed: () => optionsController.remove(index: entry.key),
+                  onPressed: () => controller.remove(index: entry.key),
                 );
               }).toList(),
             ),
@@ -163,6 +175,7 @@ class HomePage extends HookConsumerWidget {
   }
 
   Widget _option({
+    double? width,
     required String option,
     VoidCallback? onPressed,
     double? paddingRight,
@@ -177,9 +190,7 @@ class HomePage extends HookConsumerWidget {
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         Flexible(
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: paddingRight == null ? double.infinity : 100,
-            ),
+            constraints: BoxConstraints(maxWidth: width ?? double.infinity),
             child: Text(
               option,
               style: paddingRight == null
@@ -289,9 +300,7 @@ class HomePage extends HookConsumerWidget {
             Flexible(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: SingleChildScrollView(
-                  child: _option(option: option),
-                ),
+                child: SingleChildScrollView(child: _option(option: option)),
               ),
             ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
