@@ -29,16 +29,22 @@ class HomePageController extends StateNotifier<HomePageState> {
       : super(HomePageState(
             scrollController: ScrollController(), focusNode: FocusNode()));
 
-  void trueTrueFocus({required List<Option> options}) {
+  Option decision() {
+    state = state.copyWith(bottomSheetVisible: false);
+    final option = (state.options.toList()..shuffle()).first;
+    return option;
+  }
+
+  void show({List<Option>? options}) {
     state.focusNode.requestFocus();
     state = state.copyWith(
-      options: options,
+      options: options ?? state.options,
       optionsVisible: true,
       bottomSheetVisible: true,
     );
   }
 
-  void falseFalseUnfocus() {
+  void hide() {
     state.focusNode.unfocus();
     state = state.copyWith(
       options: [],
