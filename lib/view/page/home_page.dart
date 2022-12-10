@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => controller.trueTrueFocus(options: []),
+                    onPressed: () => controller.show(options: []),
                     child: const Text('決断'),
                   ),
                 ),
@@ -114,7 +114,12 @@ class HomePage extends StatelessWidget {
                           Option(
                               id: const Uuid().v4(),
                               text: 'あいうえおいうえおあうえおあいえおあいうおあいうえ'),
-                        ].map((option) => _option(option: option)).toList(),
+                        ].map((option) {
+                          return _option(
+                            option: option,
+                            paddingRight: 8,
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
@@ -154,9 +159,13 @@ class HomePage extends StatelessWidget {
     });
   }
 
-  Widget _option({required Option option, VoidCallback? onPressed}) {
+  Widget _option({
+    required Option option,
+    VoidCallback? onPressed,
+    double? paddingRight,
+  }) {
     return Container(
-      margin: EdgeInsets.only(right: onPressed == null ? 8 : 0),
+      margin: EdgeInsets.only(right: paddingRight ?? 0),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: MyColor.amber,
@@ -166,13 +175,13 @@ class HomePage extends StatelessWidget {
         Flexible(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: onPressed == null ? 100 : double.infinity,
+              maxWidth: paddingRight == null ? double.infinity : 100,
             ),
             child: Text(
               option.text,
-              style: onPressed == null
-                  ? MyTextStyle.white10
-                  : MyTextStyle.whiteOverflow,
+              style: paddingRight == null
+                  ? MyTextStyle.whiteOverflow
+                  : MyTextStyle.white10,
             ),
           ),
         ),
@@ -208,7 +217,7 @@ class HomePage extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   textEditingController.clear();
-                  controller.falseFalseUnfocus();
+                  controller.hide();
                 },
                 child: const Text('やめる'),
               ),
@@ -244,13 +253,59 @@ class HomePage extends StatelessWidget {
               TextButton(
                 onPressed: 1 < state.options.length
                     ? () {
-                        debugPrint('決断');
+                        final option = controller.decision();
+                        showDialog(
+                          context: context,
+                          builder: (context) => _dialog(option: option),
+                          barrierDismissible: false,
+                        );
                       }
                     : null,
                 child: const Text('決断'),
               ),
             ]),
           ),
+        ),
+      );
+    });
+  }
+
+  Widget _dialog({required Option option}) {
+    return HookConsumer(builder: (context, ref, child) {
+      final controller = ref.read(homePageProvider.notifier);
+
+      return Dialog(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: MyColor.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            _option(option: option),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  controller.hide();
+                },
+                child: const Text(
+                  'ホーム',
+                  style: TextStyle(color: MyColor.amber),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  controller.show();
+                },
+                child: const Text(
+                  'やり直す',
+                  style: TextStyle(color: MyColor.amber),
+                ),
+              ),
+            ]),
+          ]),
         ),
       );
     });
