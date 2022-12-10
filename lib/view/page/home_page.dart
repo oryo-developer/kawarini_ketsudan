@@ -69,7 +69,7 @@ class HomePage extends HookConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
             '〜　今までの決断(${decisions.length})　〜',
-            style: MyTextStyle.black,
+            style: MyTextStyle.black20,
           ),
         ),
         Expanded(
@@ -183,8 +183,8 @@ class HomePage extends HookConsumerWidget {
             child: Text(
               option,
               style: paddingRight == null
-                  ? MyTextStyle.whiteOverflow
-                  : MyTextStyle.white10,
+                  ? MyTextStyle.whiteClip
+                  : MyTextStyle.white,
             ),
           ),
         ),
@@ -283,11 +283,17 @@ class HomePage extends HookConsumerWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: MyColor.white,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            _option(option: option),
+            Flexible(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: SingleChildScrollView(
+                  child: _option(option: option),
+                ),
+              ),
+            ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               TextButton(
                 onPressed: () {
