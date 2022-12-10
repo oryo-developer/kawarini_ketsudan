@@ -62,10 +62,10 @@ class HomePageController extends StateNotifier<HomePageState> {
     state.focusNode.requestFocus();
     final success = ref.read(optionsProvider.notifier).add(text: text);
     if (success) {
-      Future.delayed(const Duration(milliseconds: 15)).then((_) {
+      Future.delayed(const Duration(milliseconds: 20)).then((_) {
         state.scrollController.animateTo(
           state.scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 185),
+          duration: const Duration(milliseconds: 180),
           curve: Curves.easeInOut,
         );
       });
