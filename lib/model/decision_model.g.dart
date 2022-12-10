@@ -21,6 +21,16 @@ const DecisionSchema = CollectionSchema(
       id: 0,
       name: r'createdAt',
       type: IsarType.dateTime,
+    ),
+    r'option': PropertySchema(
+      id: 1,
+      name: r'option',
+      type: IsarType.string,
+    ),
+    r'options': PropertySchema(
+      id: 2,
+      name: r'options',
+      type: IsarType.stringList,
     )
   },
   estimateSize: _decisionEstimateSize,
@@ -43,6 +53,14 @@ int _decisionEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.option.length * 3;
+  bytesCount += 3 + object.options.length * 3;
+  {
+    for (var i = 0; i < object.options.length; i++) {
+      final value = object.options[i];
+      bytesCount += value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -53,6 +71,8 @@ void _decisionSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDateTime(offsets[0], object.createdAt);
+  writer.writeString(offsets[1], object.option);
+  writer.writeStringList(offsets[2], object.options);
 }
 
 Decision _decisionDeserialize(
@@ -64,6 +84,8 @@ Decision _decisionDeserialize(
   final object = Decision();
   object.createdAt = reader.readDateTime(offsets[0]);
   object.id = id;
+  object.option = reader.readString(offsets[1]);
+  object.options = reader.readStringList(offsets[2]) ?? [];
   return object;
 }
 
@@ -76,6 +98,10 @@ P _decisionDeserializeProp<P>(
   switch (propertyId) {
     case 0:
       return (reader.readDateTime(offset)) as P;
+    case 1:
+      return (reader.readString(offset)) as P;
+    case 2:
+      return (reader.readStringList(offset) ?? []) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -274,6 +300,356 @@ extension DecisionQueryFilter
       ));
     });
   }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'option',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'option',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'option',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'option',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'option',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'option',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'option',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'option',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'option',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'option',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionsElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition>
+      optionsElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition>
+      optionsElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionsElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'options',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition>
+      optionsElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition>
+      optionsElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition>
+      optionsElementContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'options',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionsElementMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'options',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition>
+      optionsElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'options',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition>
+      optionsElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'options',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionsLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition>
+      optionsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterFilterCondition> optionsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'options',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
 }
 
 extension DecisionQueryObject
@@ -292,6 +668,18 @@ extension DecisionQuerySortBy on QueryBuilder<Decision, Decision, QSortBy> {
   QueryBuilder<Decision, Decision, QAfterSortBy> sortByCreatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterSortBy> sortByOption() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'option', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterSortBy> sortByOptionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'option', Sort.desc);
     });
   }
 }
@@ -321,6 +709,18 @@ extension DecisionQuerySortThenBy
       return query.addSortBy(r'id', Sort.desc);
     });
   }
+
+  QueryBuilder<Decision, Decision, QAfterSortBy> thenByOption() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'option', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QAfterSortBy> thenByOptionDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'option', Sort.desc);
+    });
+  }
 }
 
 extension DecisionQueryWhereDistinct
@@ -328,6 +728,19 @@ extension DecisionQueryWhereDistinct
   QueryBuilder<Decision, Decision, QDistinct> distinctByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'createdAt');
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QDistinct> distinctByOption(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'option', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Decision, Decision, QDistinct> distinctByOptions() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'options');
     });
   }
 }
@@ -343,6 +756,18 @@ extension DecisionQueryProperty
   QueryBuilder<Decision, DateTime, QQueryOperations> createdAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createdAt');
+    });
+  }
+
+  QueryBuilder<Decision, String, QQueryOperations> optionProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'option');
+    });
+  }
+
+  QueryBuilder<Decision, List<String>, QQueryOperations> optionsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'options');
     });
   }
 }
