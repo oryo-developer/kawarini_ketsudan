@@ -113,8 +113,8 @@ class HomePage extends HookConsumerWidget {
             ),
             child: Marquee(
               pauseDuration: const Duration(seconds: 2),
-              animationDuration: const Duration(seconds: 5),
-              backDuration: const Duration(seconds: 5),
+              animationDuration: const Duration(seconds: 3),
+              backDuration: const Duration(seconds: 3),
               forwardAnimation: Curves.easeInOut,
               backwardAnimation: Curves.easeInOut,
               child: Padding(
@@ -124,11 +124,9 @@ class HomePage extends HookConsumerWidget {
                     (option) {
                       return OrientationBuilder(
                         builder: (context, orientation) {
-                          final size = MediaQuery.of(context).size;
+                          final width = MediaQuery.of(context).size.width;
                           return _option(
-                            width: size.width < size.height
-                                ? (size.width - 139) / 2
-                                : (size.width - 187) / 2,
+                            width: width / 3,
                             option: option,
                             paddingRight: 8,
                           );
