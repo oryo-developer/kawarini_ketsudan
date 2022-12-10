@@ -19,9 +19,7 @@ class MyTextStyle {
     );
   }
 
-  static TextStyle get black16 {
-    return _textStyle(color: MyColor.black, fontSize: 16);
-  }
+  static TextStyle get black => _textStyle(color: MyColor.black);
 
   static TextStyle get white10 => _textStyle(fontSize: 10);
 
