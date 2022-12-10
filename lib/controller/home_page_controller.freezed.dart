@@ -16,7 +16,6 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$HomePageState {
-  List<Option> get options => throw _privateConstructorUsedError;
   bool get optionsVisible => throw _privateConstructorUsedError;
   bool get bottomSheetVisible => throw _privateConstructorUsedError;
   ScrollController get scrollController => throw _privateConstructorUsedError;
@@ -34,8 +33,7 @@ abstract class $HomePageStateCopyWith<$Res> {
       _$HomePageStateCopyWithImpl<$Res, HomePageState>;
   @useResult
   $Res call(
-      {List<Option> options,
-      bool optionsVisible,
+      {bool optionsVisible,
       bool bottomSheetVisible,
       ScrollController scrollController,
       FocusNode focusNode});
@@ -54,17 +52,12 @@ class _$HomePageStateCopyWithImpl<$Res, $Val extends HomePageState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? options = null,
     Object? optionsVisible = null,
     Object? bottomSheetVisible = null,
     Object? scrollController = null,
     Object? focusNode = null,
   }) {
     return _then(_value.copyWith(
-      options: null == options
-          ? _value.options
-          : options // ignore: cast_nullable_to_non_nullable
-              as List<Option>,
       optionsVisible: null == optionsVisible
           ? _value.optionsVisible
           : optionsVisible // ignore: cast_nullable_to_non_nullable
@@ -94,8 +87,7 @@ abstract class _$$_HomePageStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<Option> options,
-      bool optionsVisible,
+      {bool optionsVisible,
       bool bottomSheetVisible,
       ScrollController scrollController,
       FocusNode focusNode});
@@ -112,17 +104,12 @@ class __$$_HomePageStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? options = null,
     Object? optionsVisible = null,
     Object? bottomSheetVisible = null,
     Object? scrollController = null,
     Object? focusNode = null,
   }) {
     return _then(_$_HomePageState(
-      options: null == options
-          ? _value._options
-          : options // ignore: cast_nullable_to_non_nullable
-              as List<Option>,
       optionsVisible: null == optionsVisible
           ? _value.optionsVisible
           : optionsVisible // ignore: cast_nullable_to_non_nullable
@@ -147,21 +134,10 @@ class __$$_HomePageStateCopyWithImpl<$Res>
 
 class _$_HomePageState implements _HomePageState {
   const _$_HomePageState(
-      {final List<Option> options = const [],
-      this.optionsVisible = false,
+      {this.optionsVisible = false,
       this.bottomSheetVisible = false,
       required this.scrollController,
-      required this.focusNode})
-      : _options = options;
-
-  final List<Option> _options;
-  @override
-  @JsonKey()
-  List<Option> get options {
-    if (_options is EqualUnmodifiableListView) return _options;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_options);
-  }
+      required this.focusNode});
 
   @override
   @JsonKey()
@@ -176,7 +152,7 @@ class _$_HomePageState implements _HomePageState {
 
   @override
   String toString() {
-    return 'HomePageState(options: $options, optionsVisible: $optionsVisible, bottomSheetVisible: $bottomSheetVisible, scrollController: $scrollController, focusNode: $focusNode)';
+    return 'HomePageState(optionsVisible: $optionsVisible, bottomSheetVisible: $bottomSheetVisible, scrollController: $scrollController, focusNode: $focusNode)';
   }
 
   @override
@@ -184,7 +160,6 @@ class _$_HomePageState implements _HomePageState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_HomePageState &&
-            const DeepCollectionEquality().equals(other._options, _options) &&
             (identical(other.optionsVisible, optionsVisible) ||
                 other.optionsVisible == optionsVisible) &&
             (identical(other.bottomSheetVisible, bottomSheetVisible) ||
@@ -196,13 +171,8 @@ class _$_HomePageState implements _HomePageState {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_options),
-      optionsVisible,
-      bottomSheetVisible,
-      scrollController,
-      focusNode);
+  int get hashCode => Object.hash(runtimeType, optionsVisible,
+      bottomSheetVisible, scrollController, focusNode);
 
   @JsonKey(ignore: true)
   @override
@@ -213,14 +183,11 @@ class _$_HomePageState implements _HomePageState {
 
 abstract class _HomePageState implements HomePageState {
   const factory _HomePageState(
-      {final List<Option> options,
-      final bool optionsVisible,
+      {final bool optionsVisible,
       final bool bottomSheetVisible,
       required final ScrollController scrollController,
       required final FocusNode focusNode}) = _$_HomePageState;
 
-  @override
-  List<Option> get options;
   @override
   bool get optionsVisible;
   @override
