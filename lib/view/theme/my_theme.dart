@@ -14,7 +14,7 @@ class MyTheme {
           backgroundColor: MyColor.amber,
           shadowColor: MyColor.transparent,
           padding: const EdgeInsets.symmetric(vertical: 8),
-          textStyle: MyTextStyle.white32LetterSpacing,
+          textStyle: MyTextStyle.white45,
           splashFactory: NoSplash.splashFactory,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
