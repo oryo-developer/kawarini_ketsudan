@@ -26,7 +26,7 @@ class HomePage extends HookConsumerWidget {
       ),
       child: Scaffold(
         body: SafeArea(
-          minimum: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          minimum: const EdgeInsets.all(16),
           child: Column(children: [
             Expanded(
               child: Container(
