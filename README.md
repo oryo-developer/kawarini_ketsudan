@@ -1,1 +1,0 @@
-# kawarini_ketsudan
