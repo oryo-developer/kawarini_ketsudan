@@ -31,7 +31,7 @@ class HomePage extends HookConsumerWidget {
             Expanded(
               child: Container(
                 margin: EdgeInsets.only(
-                  bottom: state.bottomSheetVisible ? 66 : 16,
+                  bottom: state.bottomSheetVisible ? 50 : 16,
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
